@@ -1,0 +1,136 @@
+RUN LOG — Homework 1
+SID4 = 2733, SEED = 2733
+
+=== SECTION 1: PyTorch training log ===
+PyTorch device: cpu
+
+Training PyTorch Baseline model
+Seed 2733: test accuracy = 0.7544
+Seed 2734: test accuracy = 0.7456
+Seed 2735: test accuracy = 0.7368
+
+Training PyTorch Modified model
+Seed 2733: test accuracy = 0.7719
+Seed 2734: test accuracy = 0.7719
+Seed 2735: test accuracy = 0.7632
+
+PyTorch Baseline: mean = 0.7456, sample SD = 0.0088
+
+PyTorch Modified: mean = 0.7690, sample SD = 0.0051
+
+
+
+
+=== SECTION 2: TensorFlow training log ===
+Training TensorFlow Baseline model
+Seed 2733: test accuracy = 0.7456
+Seed 2734: test accuracy = 0.7456
+Seed 2735: test accuracy = 0.7281
+
+Training TensorFlow Modified model
+Seed 2733: test accuracy = 0.7632
+Seed 2734: test accuracy = 0.7719
+Seed 2735: test accuracy = 0.7632
+
+TensorFlow Baseline: mean = 0.7398, sample SD = 0.0101
+
+TensorFlow Modified: mean = 0.7661, sample SD = 0.0051
+
+
+
+=== SECTION 3: Dataset sanity check ===
+Dataset shape: (759, 9)
+Missing values: 0
+Duplicate rows: 0
+
+Outcome counts:
+Outcome
+1    496
+0    263
+Name: count, dtype: int64
+	Pregnancies	Glucose	      BloodPressure	SkinThickness	Insulin 	BMI	     DiabetesPedigree	Age	       Outcome
+count	759.000000	759.000000	759.000000	759.000000	759.000000	759.000000	759.000000	759.000000	759.000000
+mean	-0.407657	0.218563	0.176505	-0.289735	-0.323534	-0.032245	-0.663253	-0.516162	0.653491
+std	0.386260	0.306419	0.201287	0.258480	0.375544	0.205376	0.283056	0.400794	0.476171
+min	-0.882353	-0.557789	-0.606557	-0.858586	-0.966903	-0.457526	-0.994876	-0.966667	0.000000
+25%	-0.764706	-0.005025	0.016393	-0.494949	-0.716312	-0.178837	-0.858241	-0.866667	0.000000
+50%	-0.529412	0.165829	0.180328	-0.292929	0.000000	-0.034277	-0.747225	-0.633333	1.000000
+75%	0.000000	0.407035	0.311475	0.000000	0.000000	0.087929	-0.531597	-0.233333	1.000000
+max	1.000000	1.000000	1.000000	1.000000	1.000000	1.000000	1.000000	1.000000	1.000000
+
+
+
+=== SECTION 4: CUDA environment check ===
+Fri Aug 28 19:40:02 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.82.07              Driver Version: 580.82.07      CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       Off |   00000000:00:04.0 Off |                    0 |
+| N/A   53C    P8             10W /   70W |       0MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2025 NVIDIA Corporation
+Built on Fri_Feb_21_20:23:50_PST_2025
+Cuda compilation tools, release 12.8, V12.8.93
+Build cuda_12.8.r12.8/compiler.35583870_0
+
+=== SECTION 5: matmul_final — CPU vs GPU across sizes ===
+
+=== N = 256 ===
+CPU time:        20.4408 ms
+GPU kernel time: 0.2281 ms
+H2D+D2H time:    0.4213 ms
+End-to-end GPU:  0.6495 ms
+Speedup:         31.47x
+Max CPU/GPU diff: 1.907349e-05
+
+=== N = 1024 ===
+CPU time:        3429.8649 ms
+GPU kernel time: 9.2046 ms
+H2D+D2H time:    4.6925 ms
+End-to-end GPU:  13.8971 ms
+Speedup:         246.80x
+Max CPU/GPU diff: 9.155273e-05
+
+=== N = 4096 ===
+CPU time:        743422.8464 ms
+GPU kernel time: 408.9250 ms
+H2D+D2H time:    87.4966 ms
+End-to-end GPU:  496.4216 ms
+Speedup:         1497.56x
+Max CPU/GPU diff: 4.272461e-04
+
+=== SECTION 6: nvprof profiling (N=1024) ===
+==5408== NVPROF is profiling process 5408, command: ./matmul_profile
+Done.
+==5408== Profiling application: ./matmul_profile
+==5408== Profiling result:
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+ GPU activities:   74.11%  9.1989ms         1  9.1989ms  9.1989ms  9.1989ms  matmulKernel(float*, float*, float*, int)
+                   14.02%  1.7401ms         2  870.06us  859.85us  880.27us  [CUDA memcpy HtoD]
+                   11.87%  1.4740ms         1  1.4740ms  1.4740ms  1.4740ms  [CUDA memcpy DtoH]
+      API calls:   90.97%  179.61ms         3  59.868ms  61.567us  179.48ms  cudaMalloc
+                    4.66%  9.2004ms         1  9.2004ms  9.2004ms  9.2004ms  cudaDeviceSynchronize
+                    2.49%  4.9189ms         3  1.6396ms  1.0875ms  2.7277ms  cudaMemcpy
+                    1.33%  2.6357ms       114  23.119us      89ns  1.4570ms  cuDeviceGetAttribute
+                    0.53%  1.0473ms         1  1.0473ms  1.0473ms  1.0473ms  cudaLaunchKernel
+                    0.01%  11.685us         1  11.685us  11.685us  11.685us  cuDeviceGetName
+                    0.00%  9.5610us         2  4.7800us     168ns  9.3930us  cuDeviceGet
+                    0.00%  3.6170us         1  3.6170us  3.6170us  3.6170us  cuDeviceTotalMem
+                    0.00%  2.0090us         1  2.0090us  2.0090us  2.0090us  cuDeviceGetUuid
+                    0.00%  1.6620us         1  1.6620us  1.6620us  1.6620us  cuDeviceGetPCIBusId
+                    0.00%  1.3270us         3     442ns      90ns  1.0340us  cuDeviceGetCount
+                    0.00%     374ns         1     374ns     374ns     374ns  cuModuleGetLoadingMode

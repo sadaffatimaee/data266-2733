@@ -1,0 +1,1 @@
+Model checkpoint (wv_finetuned_sid4_2733.kv) submitted separately via Canvas file since it exceeds GitHub's 25MB web upload limit.

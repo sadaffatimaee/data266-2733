@@ -1,8 +1,0 @@
-Model errors: tried llama-3.3-70b-versatile and llama-3.1-8b-instant, both gave 404 not found. Fixed by checking account's available models and using openai/gpt-oss-20b instead.
-
-Task 1: all 6 techniques ran fine after the fix.
-
-Task 2 Part 1 (unmasked) loss: 2.04 → 0.87 → 0.53 → 0.45 → 0.36 → 0.35 (epochs 20-200)
-
-Task 2 Part 2 (masked) loss: 2.08 → 0.79 → 0.43 → 0.29 → 0.26 → 0.23 (epochs 20-200)
-Mask confirmed working — no attention to future token

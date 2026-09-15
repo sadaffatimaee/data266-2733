@@ -1,0 +1,17 @@
+SJSU GPU Lab Reservation Record
+
+Date: September 14 2026
+Start Time: 12:00 PM PDT
+Workstation: RTX 4090
+GPU UUID: GPU b60240a9 31a3 126f 751f afc1dcc1d73f
+Student: Sadaf Fatima Syeda
+
+Total Reserved Time: Approximately 8 hours
+Actual GPU Hours Used: Approximately 0.75 hours for benchmarking
+
+Benchmark Execution:
+Part A Provenance Setup
+Part B Matrix Multiplication Benchmarks
+Part C Roofline Model Analysis
+Part D Attention OOM Testing
+Part E Thermal Test Partial

@@ -1,0 +1,12 @@
+RUN_LOG.txt HW2.5 GPU Assignment
+
+Date 2026 09 14
+GPU RTX 4090
+UUID GPU b60240a9 31a3 126f 751f afc1dcc1d73f
+
+COMPLETION STATUS
+Part A GPU Provenance COMPLETE
+Part B Matrix Multiplication Benchmarks COMPLETE
+Part C Roofline Model COMPLETE
+Part D Attention OOM Analysis COMPLETE
+Part E Thermal Test PARTIAL Docker stability issue

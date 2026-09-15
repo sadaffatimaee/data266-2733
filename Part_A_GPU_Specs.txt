@@ -1,0 +1,13 @@
+=== PART A: GPU PROVENANCE ===
+Machine: SJSU GPU Lab
+Date: 2026-09-14
+Operator: Sadaf 
+
+GPU: NVIDIA GeForce RTX 4090
+UUID: GPU-b60240a9-31a3-126f-751f-afc1dcc1d73f
+Driver: 610.60
+CUDA: 12.1
+Memory: 24 GB
+Power Limit: 450 W
+Max Clock: 3105 MHz
+Architecture: Ada Lovelace

@@ -1,0 +1,30 @@
+
+=== PART A: ONBOARDING AND PROVENANCE ===
+
+1. RESERVATION RECORD
+   Date: 2026-09-14
+   Workstation: RTX 4090
+   Reserved Time Slot: 12:15 - 20:30 (approximately 8.25 hours reserved)
+   GPU-Hours Consumed: ~0.75 hours (45 minutes of active benchmarking)
+
+2. NVIDIA-SMI CAPTURE
+   GPU UUID: GPU-b60240a9-31a3-126f-751f-afc1dcc1d73f
+   Product Name: NVIDIA GeForce RTX 4090
+   Driver Version: 610.60
+   CUDA Version: 12.1
+   Total GPU Memory: 24,564 MiB (24 GB)
+   Power Limit: 450 W
+   Max Graphics Clock: 3105 MHz
+   Max Memory Clock: 10,501 MHz
+
+3. VENDOR DOCUMENTATION (NVIDIA RTX 4090 Datasheet)
+   Source: https://www.nvidia.com/content/dam/en-us/Solutions/geforce/ada/nvidia-ada-gpu-architecture-whitepaper-v2.1.pdf
+   
+   GPU Architecture: Ada Lovelace (GA102)
+   Memory Type: GDDR6X
+   Memory Bandwidth: 576 GB/s
+   Tensor Cores: 4th Generation (16,384 cores total)
+   Tensor Core Peak FP32: 660 TFLOPS theoretical
+   Reduced Precisions Supported: FP32, TF32, FP16, BF16, FP8
+
+

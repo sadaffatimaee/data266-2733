@@ -1,0 +1,2 @@
+I learned the code via Gemini by understanding what goes into the right block for execution. 
+The only error Gemini produced was using the text mod instead of % or a calculation, which triggered a Python SyntaxError. I caught this immediately from the error message and fixed it by substituting mod with the standard modulo operator I.e %

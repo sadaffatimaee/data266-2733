@@ -1,0 +1,74 @@
+SID4: 2733, SEED: 2733, SLICE: 733, HP_ID: 3, CLS_A: 3, CLS_B: 7
+Device: cpu
+
+Vocabulary size: 49
+
+
+Total parameter count: 425777
+Hidden dimension: 128
+Number of heads: 4
+Number of layers: 2
+
+Epoch 1, Loss: 1.9624
+Epoch 2, Loss: 1.8966
+Epoch 3, Loss: 1.8248
+Epoch 4, Loss: 1.7381
+Epoch 5, Loss: 1.6402
+Epoch 6, Loss: 1.5281
+Epoch 7, Loss: 1.4009
+
+1. Greedy Decoding 
+ROMEO:
+O Romeore, Rou thefoue the the thy wherererefair thy thy thy wherefulor s
+
+
+Romeoreore Romeoreoreoreoreoreore, t Romerereomefaromerd tio,
+Ro, tho, t t
+
+ 2. Temperature Sampling 
+Low Temperature (T = 0.3):
+ROMEO:
+O Romeow Ro to thearee thethe theerd:
+Beear thou t theseny thousen theny swo her s:
+Tallll butin apuththid n.
+Romethousesefo nd t nt nd thet winouthes
+
+Medium Temperature (T = 1.0):
+ROMEO:
+O: hat I thou tat wornt theeels
+Sho y I anome at’t camatl anthus this s s?
+My ise, tal igue!
+Thearno no wecamear haick;
+RO, or fakof, at shald whe pai
+
+High Temperature (T = 1.8):
+ROMEO:
+Dh:, hawis iem
+We f thais nam.ulsis nous.riO twot, omme itwelf,
+Ore if ha nd ntuthrno k hotnk woulhe Ronog:me;
+De Ro,
+Re, mal cr fou tof, e cnamerhene
+
+=== 3. Top-k Sampling ===
+Narrow Top-k (k = 3):
+ROMEO:
+O:
+I thak tou not name? tha nou nam:
+Tame thice t’s the
+Thy at this nat namy thel? amy ne
+Moue.
+By nor, tor nononor nored nameame.
+By nama palf,
+
+O:
+O
+
+Wide Top-k (k = 20):
+ROMEO:
+I talond tho meou the sw she to arnaks:
+I ho hy isere easer spagis nof al hisme
+RO, g:
+Ano that ome o thidinata whatha thewhe tu ous f woulelle.
+
+
+

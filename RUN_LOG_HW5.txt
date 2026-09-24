@@ -1,0 +1,56 @@
+SID4: 2733 | SEED: 2733 | SLICE: 733 | HP_ID: 3 | CLS_A: 3 | CLS_B: 7
+
+=== Baseline Inference ===
+Sample 1 Baseline Output:
+#Person1#: Thank you for your information.
+
+Sample 2 Baseline Output:
+#Person1#: Thanks for calling, Blanca.
+
+=== LoRA Training (r=4) ===
+trainable params: 172,032 || all params: 77,133,184 || trainable%: 0.2230
+
+[125/125 12:04, Epoch 1/1]
+Step | Training Loss
+10   | 2.567105
+20   | 2.403513
+30   | 2.291462
+40   | 2.172524
+50   | 2.073964
+60   | 1.979379
+70   | 2.006142
+80   | 1.900265
+90   | 1.845356
+100  | 1.929589
+110  | 1.843141
+120  | 1.797780
+
+=== Post-Fine-Tuning Inference ===
+Sample 1 Fine-Tuned Output:
+#Person1# is going to call for a tender. #Person2# is going to open the tender at first next month in Beijing. #Person1# will open the tender at first next month in Beijing. #Person2# will open the tender at first next month in Beijing.
+
+Sample 2 Fine-Tuned Output:
+#Person1# is interested in one-bedroom apartment. #Person2# is interested in one-bedroom apartment. #Person1# will come over tomorrow to take a look. #Person2# will see #Person1# tomorrow.
+
+=== Task 7: Experiment (r=16) ===
+trainable params: 688,128 || all params: 77,649,280 || trainable%: 0.8862
+
+[125/125 11:43, Epoch 1/1]
+Step | Training Loss
+10   | 2.570209
+20   | 2.417581
+30   | 2.305521
+40   | 2.186996
+50   | 2.086524
+60   | 1.982259
+70   | 2.008565
+80   | 1.910417
+90   | 1.847049
+100  | 1.930986
+110  | 1.845713
+120  | 1.797857
+
+TrainOutput(global_step=125, training_loss=2.071483108520508, metrics={'train_runtime': 709.878, 'train_samples_per_second': 0.704, 'train_steps_per_second': 0.176, 'total_flos': 60753339064320.0, 'train_loss': 2.071483108520508, 'epoch': 1.0})
+
+
+

@@ -1,0 +1,33 @@
+HW6 STL-10 Run Log
+
+Device: CUDA
+SID4: 2733
+Seed: 2733
+
+Part A:
+Supervised ResNet-18
+Training images: 500
+Epochs: 12
+Test accuracy: 38.34%
+
+Part B:
+Rotation SSL
+Unlabeled images: 100,000
+Rotation pretraining epochs: 12
+Linear evaluation epochs: 15
+Encoder frozen during linear evaluation: Yes
+Test accuracy: 37.66%
+
+Part C:
+SimCLR
+Unlabeled images: 20,000
+Temperature: 0.2
+Contrastive pretraining epochs: 12
+Linear evaluation epochs: 15
+Encoder frozen during linear evaluation: Yes
+Test accuracy: 47.23%
+
+Part D:
+Query indices: 10, 150, 300
+Nearest neighbors: top 5
+Similarity: cosine similarity

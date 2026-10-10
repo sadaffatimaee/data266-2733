@@ -1,0 +1,15 @@
+
+
+SID4: 2733
+SEED: 2733
+Epochs: 10
+Batch size: 128
+Learning rate: 0.001
+
+FC-AE final training loss: 0.0113
+FC-AE test MSE: 0.0114
+
+VAE final training loss: 246.3015
+VAE test loss: 248.0277
+
+No runtime errors occurred.

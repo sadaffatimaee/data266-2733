@@ -1,0 +1,28 @@
+HW8 Diffusion Run Log
+Date: 2026-10-21
+
+Environment:
+- Dataset: MNIST
+- Device: Google Colab GPU
+- Diffusion steps: T = 100
+- Batch size: 128
+- Epochs: 50
+
+Training:
+- Epoch 1 loss: 0.1498
+- Epoch 50 loss: 0.0607
+- Training completed successfully.
+
+Tensor checks:
+- x0 shape: torch.Size([128, 1, 28, 28])
+- xt shape: torch.Size([128, 1, 28, 28])
+- eps shape: torch.Size([128, 1, 28, 28])
+- t shape: torch.Size([128])
+
+Sampling:
+- DDPM samples shape: torch.Size([16, 1, 28, 28])
+- DDIM 50-step samples shape: torch.Size([16, 1, 28, 28])
+- DDIM 20-step samples shape: torch.Size([16, 1, 28, 28])
+
+Errors:
+- No runtime errors occurred during the final run.

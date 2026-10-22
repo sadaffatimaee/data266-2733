@@ -1,0 +1,6 @@
+HW4.5 RUN LOG — Sadaf Fatima Syeda
+
+2026-10-22 | Colab Tesla T4 (14.6 GB) | UUID GPU-8f7abc33-86e9-f14f-ec5e-0c190b4ff575
+- 12:16  nvidia-smi check
+- 12:24–12:32  Part A batch sweep (bs 8–128 ran, 256 OOM) → partA_Tesla_T4.csv, partA_throughput.png
+  GPU time: ~0.13 h

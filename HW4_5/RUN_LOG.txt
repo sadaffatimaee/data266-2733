@@ -4,3 +4,13 @@ HW4.5 RUN LOG — Sadaf Fatima Syeda
 - 12:16  nvidia-smi check
 - 12:24–12:32  Part A batch sweep (bs 8–128 ran, 256 OOM) → partA_Tesla_T4.csv, partA_throughput.png
   GPU time: ~0.13 h
+
+2026-10-22 | Colab Tesla T4 (14.6 GB) | UUID GPU-e130854d-f361-404b-de10-de0caddb0213
+- 13:25–13:36  Part B first attempt (baseline, AMP, checkpointing) — lost to Colab session restart
+  GPU time: ~0.2 h
+
+2026-10-22 | Colab Tesla T4 (14.6 GB) | UUID GPU-9f6ffbaf-c954-d8b2-05ff-e1177d373682
+- 14:46–15:15  Part B full run: baseline, AMP, checkpointing, accumulation (32x8), 8-bit, AMP+8-bit → partB_Tesla_T4.csv
+  GPU time: ~0.5 h
+
+Total GPU time so far: ~0.83 h

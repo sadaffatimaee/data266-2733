@@ -1,0 +1,2 @@
+gpu,batch_size,tokens_per_second,p50_latency_ms,p95_latency_ms
+Tesla T4,8,141.94475771796175,936.1457949999021,4056.819359449934

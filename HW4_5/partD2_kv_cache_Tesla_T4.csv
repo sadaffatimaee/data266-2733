@@ -1,0 +1,10 @@
+gpu,context_len,batch,test,engine_started,kv_needed_bs8_gib,kv_pool_gib,kv_pool_tokens,max_concurrency,bs8_completed,bs8_seconds,fits_bs8
+Tesla T4,1024,8,run,True,0.09375,10.31,900960,879.84,8/8,1.54,True
+Tesla T4,2048,8,run,True,0.1875,10.31,900960,439.92,8/8,1.58,True
+Tesla T4,4096,8,run,True,0.375,10.31,900960,219.96,8/8,2.37,True
+Tesla T4,8192,8,run,True,0.75,10.31,900960,109.98,8/8,5.8,True
+Tesla T4,16384,8,run,True,1.5,10.31,900960,54.99,8/8,19.42,True
+Tesla T4,32768,8,run,True,3.0,10.31,900960,27.5,8/8,74.08,True
+Tesla T4,65536,8,init,True,6.0,10.31,900960,13.75,,,True
+Tesla T4,131072,8,init,True,12.0,10.31,900960,6.87,,,False
+Tesla T4,262144,8,init,True,24.0,10.31,900960,3.44,,,False

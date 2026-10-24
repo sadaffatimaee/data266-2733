@@ -13,4 +13,12 @@ HW4.5 RUN LOG — Sadaf Fatima Syeda
 - 14:46–15:15  Part B full run: baseline, AMP, checkpointing, accumulation (32x8), 8-bit, AMP+8-bit → partB_Tesla_T4.csv
   GPU time: ~0.5 h
 
-Total GPU time so far: ~0.83 h
+2026-10-24 | Colab Tesla T4 (14.6 GB) | UUID GPU-33381780-5995-11e8-a393-bb16d75298ed
+- 14:39–14:44  vLLM 0.32.0 install
+- 14:47–14:52  Part D1 vLLM benchmark bs 1/8/32 (bs8 re-run after one outlier) → partD1_Tesla_T4.csv
+- 14:57–15:05  Part D2 KV cache sweep, batch 8, context 1k–256k → partD2_kv_cache_Tesla_T4.csv, partD_kv_cache.png
+  GPU time: ~0.45 h
+
+Part C: Has been skipped 
+
+Total GPU time so far: ~1.28 h

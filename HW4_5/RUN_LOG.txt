@@ -21,4 +21,6 @@ HW4.5 RUN LOG — Sadaf Fatima Syeda
 
 Part C: Has been skipped 
 
-Total GPU time so far: ~1.28 h
+Total GPU time so far: 1.28 h
+
+All HW4.5 runs were done on Google Colab (Tesla T4)

@@ -1,0 +1,36 @@
+# Metrics and Results
+
+## VAE Reconstruction
+
+- Latent shape: `(8, 4, 8, 8)`
+- Reconstructed image shape: `(8, 3, 64, 64)`
+- Reconstruction MSE: `0.007643`
+- Latent scaling factor: `0.18215`
+
+## Forward Diffusion
+
+- Diffusion steps: `1000`
+- Beta schedule: `[0.0001, 0.02]`
+
+| Timestep | Reconstruction MSE |
+|---:|---:|
+| 0 | 0.006317 |
+| 200 | 0.187685 |
+| 500 | 0.825087 |
+| 800 | 1.173333 |
+| 1000 | 1.223222 |
+
+## Training
+
+- Epochs: `50`
+- Batch size: `128`
+- Learning rate: `2e-5`
+- Label-drop probability: `0.1`
+- Final average training loss: `0.107927`
+
+## Sampling
+
+- Guidance scale: `3.0`
+- Generated images: `64`
+- Sample grid labels: `0–9 repeated`
+- Generated image shape: `(64, 3, 64, 64)`

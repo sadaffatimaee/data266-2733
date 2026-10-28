@@ -34,3 +34,9 @@
 - Generated images: `64`
 - Sample grid labels: `0–9 repeated`
 - Generated image shape: `(64, 3, 64, 64)`
+
+- ## Implementation Notes
+
+The Fashion-MNIST images were converted to 3 channels so they could be processed by the pretrained RGB VAE. The VAE produces 4-channel latent tensors, so the diffusion U-Net operates on 4-channel latent inputs.
+
+For the required display timestep `t=1000`, the code maps it to schedule index `999`, because PyTorch tensor indices range from `0` through `999` for a 1000-step schedule.

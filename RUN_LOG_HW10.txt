@@ -1,0 +1,236 @@
+RUN LOG - HW10: Improving RAG with Reranking, Chunking, and Conversational Memory
+Platform : Google Colab, Python 3, T4 GPU
+Date     : 2026-11-04 (final run approx. 19:00-19:48 local time)
+Note     : Colab did not store per-cell timestamps; durations are those reported by Colab.
+Source   : console output from the executed notebook RAG_Reranking_Chunking_Memory.ipynb
+============================================================
+
+[earlier attempt] >>> !pip install -qU datasets sentence-transformers chromadb ... pandas
+------------------------------------------------------------
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+google-colab 1.0.0 requires pandas==2.2.3, but you have pandas 3.1.1 which is incompatible.
+google-adk 2.7.1 requires opentelemetry-api<=1.42.1,>=1.39, but you have opentelemetry-api 1.45.2 which is incompatible.
+google-adk 2.7.1 requires opentelemetry-sdk<=1.42.1,>=1.39, but you have opentelemetry-sdk 1.45.2 which is incompatible.
+cudf-cu13 26.6.0 requires pandas<2.4.0,>=2.0, but you have pandas 3.1.1 which is incompatible.
+cudf-cu13 26.6.0 requires pyarrow<24,>=19.0.0, but you have pyarrow 26.0.1 which is incompatible.
+dask-cudf-cu13 26.6.0 requires pandas<2.4.0,>=2.0, but you have pandas 3.1.1 which is incompatible.
+-> Fix: runtime reset; reinstalled without -U, with pandas==2.2.3 pinned.
+
+[cell 1] >>> !pip install -q datasets sentence-transformers chromadb langchain-core langchain-text-splitters langchain-chroma langchain-huggingface "pandas==2.2.3"
+------------------------------------------------------------
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+google-adk 2.7.1 requires opentelemetry-api<=1.42.1,>=1.39, but you have opentelemetry-api 1.45.2 which is incompatible.
+google-adk 2.7.1 requires opentelemetry-sdk<=1.42.1,>=1.39, but you have opentelemetry-sdk 1.45.2 which is incompatible.
+
+[cell 1] | 35s >>> import re ... version check
+------------------------------------------------------------
+pandas: 2.2.3
+chromadb: 1.5.9
+GPU available: True
+
+[cell 2] | 2m >>> ds = load_dataset("ccdv/arxiv-summarization", "document", split="train[:100]")
+------------------------------------------------------------
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Generating train split: 100% 203037/203037 [01:26<00:00, 2589.00 examples/s]
+Generating validation split: 100% 6436/6436 [00:01<00:00, 5231.47 examples/s]
+Generating test split: 100% 6440/6440 [00:03<00:00, 1005.63 examples/s]
+Dataset({
+    features: ['article', 'abstract'],
+    num_rows: 100
+})
+
+[cell 3] >>> inspect raw data
+------------------------------------------------------------
+number of documents: 100
+avg characters per article: 36370
+shortest: 3420  longest: 193700
+contains newlines: False
+
+[cell 4] >>> def clean_text(t):
+------------------------------------------------------------
+documents kept: 100
+
+[cell 5] >>> before / after
+------------------------------------------------------------
+total characters before: 3,637,064
+total characters after:  3,122,643
+@xmath/@xcite placeholders before: 41,187
+@xmath/@xcite placeholders after:  0
+
+[cell 6] >>> Strategy 1: fixed-size chunks
+------------------------------------------------------------
+Strategy 1 chunks: 4509
+
+[cell 7] >>> Strategy 2: sentence-aware chunks
+------------------------------------------------------------
+Strategy 2 chunks: 4687
+
+[cell 8] >>> chunk_stats
+------------------------------------------------------------
+             strategy  num_chunks  avg_chars  min_chars  max_chars  % ending at sentence boundary
+0      S1: fixed-size        4509        790          5        800                            3.5
+1  S2: sentence-aware        4687        693          8        799                           96.7
+
+[cell 9] | 13s >>> HuggingFaceEmbeddings
+------------------------------------------------------------
+embedding model: BAAI/bge-small-en-v1.5
+vectors: 2  dimensions: 384
+
+[cell 10] | 81s >>> build Chroma stores
+------------------------------------------------------------
+arxiv_s1_fixed: 100% 18/18 [00:39<00:00, 2.07s/it]
+arxiv_s2_sentence: 100% 19/19 [00:42<00:00, 1.98s/it]
+S1 vectors stored: 4509
+S2 vectors stored: 4687
+
+[cell 11] >>> test search
+------------------------------------------------------------
+S1 top hit -> doc 0: compare their risks evaluated for test data...
+S2 top hit -> doc 0: of course, a practical approach might be to fit both models...
+
+[cell 12] >>> queries
+------------------------------------------------------------
+Q1 | target doc 0 | What learning rates do regularized kernel based methods achieve for additive models?
+Q2 | target doc 3 | How does a random phase diffuser affect the scintillation of laser light?
+Q3 | target doc 28 | How can quantum error correction protect against fully correlated noise?
+Q4 | target doc 32 | How is the origin-destination matrix estimated from passenger counts and station surveys?
+
+[cell 13] >>> retrieval WITHOUT reranking
+------------------------------------------------------------
+Q1 S1: s1-0-0, s1-0-10, s1-0-2, s1-0-1, s1-0-4
+Q1 S2: s2-0-1, s2-0-10, s2-0-3, s2-0-4, s2-0-2
+Q2 S1: s1-3-24, s1-3-25, s1-3-3, s1-3-15, s1-3-4
+Q2 S2: s2-3-25, s2-3-24, s2-3-1, s2-3-4, s2-3-19
+Q3 S1: s1-28-13, s1-28-14, s1-28-2, s1-28-0, s1-28-3
+Q3 S2: s2-28-14, s2-28-3, s2-28-13, s2-28-15, s2-28-0
+Q4 S1: s1-32-5, s1-32-4, s1-32-7, s1-32-0, s1-32-39
+Q4 S2: s2-32-4, s2-32-5, s2-32-7, s2-32-0, s2-32-11
+
+[cell 14] | 14s >>> retrieval WITH reranking (cross-encoder/ms-marco-MiniLM-L-6-v2, 25 -> 5)
+------------------------------------------------------------
+Q1 S1: s1-0-10, s1-0-2, s1-0-0, s1-0-21, s1-0-28
+Q1 S2: s2-0-1, s2-0-30, s2-0-23, s2-0-10, s2-0-3
+Q2 S1: s1-3-1, s1-3-25, s1-3-23, s1-3-3, s1-3-24
+Q2 S2: s2-3-1, s2-3-19, s2-3-25, s2-3-23, s2-3-24
+Q3 S1: s1-28-2, s1-28-14, s1-28-13, s1-28-0, s1-28-12
+Q3 S2: s2-28-3, s2-28-14, s2-28-13, s2-28-0, s2-28-10
+Q4 S1: s1-32-0, s1-32-4, s1-32-37, s1-32-5, s1-32-36
+Q4 S2: s2-32-0, s2-32-4, s2-32-39, s2-32-5, s2-32-11
+
+[cell 15] >>> rerank changes
+------------------------------------------------------------
+  query strategy top-1 before top-1 after  kept  new from reranking
+0    Q1       S1       s1-0-0     s1-0-10     3    s1-0-21, s1-0-28
+1    Q1       S2       s2-0-1      s2-0-1     3    s2-0-30, s2-0-23
+2    Q2       S1      s1-3-24      s1-3-1     3     s1-3-1, s1-3-23
+3    Q2       S2      s2-3-25      s2-3-1     4             s2-3-23
+4    Q3       S1     s1-28-13     s1-28-2     4            s1-28-12
+5    Q3       S2     s2-28-14     s2-28-3     4            s2-28-10
+6    Q4       S1      s1-32-5     s1-32-0     3  s1-32-37, s1-32-36
+7    Q4       S2      s2-32-4     s2-32-0     4            s2-32-39
+
+[cell 16] >>> ConversationMemory
+------------------------------------------------------------
+C1 turn 2 original : Which network topologies did they find work best for it?
+C1 turn 2 rewritten: What is a network-on-chip based turbo decoder architecture? Which network topologies did they find work best for it?
+C2 turn 2 original : What upper bounds do they prove for them?
+C2 turn 2 rewritten: What are galled phylogenetic networks? What upper bounds do they prove for them?
+
+[cell 17] >>> multi-turn with / without memory
+------------------------------------------------------------
+   conv strategy     method     memory         top-5 doc ids  from target paper
+0    C1       S1  no_rerank  no_memory  [99, 99, 99, 99, 99]  5/5
+1    C1       S1  no_rerank     memory  [99, 99, 99, 99, 99]  5/5
+2    C1       S1     rerank  no_memory  [99, 99, 99, 99, 99]  5/5
+3    C1       S1     rerank     memory  [99, 99, 99, 99, 99]  5/5
+4    C1       S2  no_rerank  no_memory   [99, 99, 99, 7, 99]  4/5
+5    C1       S2  no_rerank     memory  [99, 99, 99, 99, 99]  5/5
+6    C1       S2     rerank  no_memory  [99, 99, 99, 99, 99]  5/5
+7    C1       S2     rerank     memory  [99, 99, 99, 99, 99]  5/5
+8    C2       S1  no_rerank  no_memory     [5, 44, 65, 5, 5]  0/5
+9    C2       S1  no_rerank     memory  [58, 58, 58, 58, 58]  5/5
+10   C2       S1     rerank  no_memory    [58, 5, 65, 5, 44]  1/5
+11   C2       S1     rerank     memory  [58, 58, 58, 58, 58]  5/5
+12   C2       S2  no_rerank  no_memory      [44, 5, 5, 5, 5]  0/5
+13   C2       S2  no_rerank     memory  [58, 58, 58, 58, 58]  5/5
+14   C2       S2     rerank  no_memory    [19, 5, 5, 44, 65]  0/5
+15   C2       S2     rerank     memory  [58, 58, 58, 58, 58]  5/5
+
+[cell 18] >>> pool + suggested labels
+------------------------------------------------------------
+total runs: 32
+unique chunks to label: 101
+suggested relevant: 64
+
+[cell 34] >>> overrides (manual review)
+------------------------------------------------------------
+manual corrections: 27
+typos (should be empty): []
+final relevant chunks: 49 of 101
+
+[cell 35] >>> evaluate (K = 5)
+------------------------------------------------------------
+   query strategy     rerank     memory      labels top5  P@5    R@5   RR
+0     Q1       S1  no_rerank          -  [0, 1, 0, 0, 0]  0.2  0.333  0.5
+1     Q1       S2  no_rerank          -  [0, 1, 1, 0, 0]  0.4  0.500  0.5
+2     Q2       S1  no_rerank          -  [1, 1, 0, 1, 0]  0.6  0.600  1.0
+3     Q2       S2  no_rerank          -  [1, 1, 1, 0, 1]  0.8  0.800  1.0
+4     Q3       S1  no_rerank          -  [1, 1, 1, 0, 1]  0.8  0.800  1.0
+5     Q3       S2  no_rerank          -  [1, 0, 1, 1, 0]  0.6  0.750  1.0
+6     Q4       S1  no_rerank          -  [1, 1, 0, 0, 0]  0.4  0.500  1.0
+7     Q4       S2  no_rerank          -  [1, 1, 0, 0, 1]  0.6  0.750  1.0
+8     Q1       S1     rerank          -  [1, 0, 0, 1, 1]  0.6  1.000  1.0
+9     Q1       S2     rerank          -  [0, 1, 1, 1, 1]  0.8  1.000  0.5
+10    Q2       S1     rerank          -  [1, 1, 1, 0, 1]  0.8  0.800  1.0
+11    Q2       S2     rerank          -  [1, 1, 1, 1, 1]  1.0  1.000  1.0
+12    Q3       S1     rerank          -  [1, 1, 1, 0, 1]  0.8  0.800  1.0
+13    Q3       S2     rerank          -  [0, 1, 1, 0, 1]  0.6  0.750  0.5
+14    Q4       S1     rerank          -  [0, 1, 1, 1, 1]  0.8  1.000  0.5
+15    Q4       S2     rerank          -  [0, 1, 1, 1, 1]  0.8  1.000  0.5
+16    C1       S1  no_rerank  no_memory  [0, 1, 1, 0, 1]  0.6  0.750  0.5
+17    C1       S1  no_rerank     memory  [1, 0, 0, 0, 0]  0.2  0.250  1.0
+18    C1       S1     rerank  no_memory  [1, 1, 1, 0, 0]  0.6  0.750  1.0
+19    C1       S1     rerank     memory  [1, 0, 0, 0, 0]  0.2  0.250  1.0
+20    C1       S2  no_rerank  no_memory  [1, 0, 1, 0, 0]  0.4  0.667  1.0
+21    C1       S2  no_rerank     memory  [1, 0, 0, 0, 0]  0.2  0.333  1.0
+22    C1       S2     rerank  no_memory  [1, 1, 1, 0, 0]  0.6  1.000  1.0
+23    C1       S2     rerank     memory  [1, 0, 0, 0, 0]  0.2  0.333  1.0
+24    C2       S1  no_rerank  no_memory  [0, 0, 0, 0, 0]  0.0  0.000  0.0
+25    C2       S1  no_rerank     memory  [0, 1, 1, 1, 1]  0.8  0.800  0.5
+26    C2       S1     rerank  no_memory  [0, 0, 0, 0, 0]  0.0  0.000  0.0
+27    C2       S1     rerank     memory  [1, 0, 1, 1, 0]  0.6  0.600  1.0
+28    C2       S2  no_rerank  no_memory  [0, 0, 0, 0, 0]  0.0  0.000  0.0
+29    C2       S2  no_rerank     memory  [0, 1, 1, 0, 0]  0.4  0.667  0.5
+30    C2       S2     rerank  no_memory  [0, 0, 0, 0, 0]  0.0  0.000  0.0
+31    C2       S2     rerank     memory  [1, 1, 0, 1, 0]  0.6  1.000  1.0
+
+[cell 36] >>> comparison tables
+------------------------------------------------------------
+Comparison 1: WITHOUT vs WITH reranking (Q1-Q4, both strategies)
+             P@5    R@5    MRR
+no_rerank  0.550  0.629  0.875
+rerank     0.775  0.919  0.750
+
+Comparison 2: Chunking S1 vs S2 (Q1-Q4, both retrieval methods)
+            P@5    R@5    MRR
+S1        0.625  0.729  0.875
+S2        0.700  0.819  0.750
+
+Full grid: strategy x reranking (Q1-Q4)
+                     P@5    R@5    MRR
+S1       no_rerank  0.50  0.558  0.875
+         rerank     0.75  0.900  0.875
+S2       no_rerank  0.60  0.700  0.875
+         rerank     0.80  0.938  0.625
+
+Comparison 3: WITHOUT vs WITH memory (turn 2 of C1, C2)
+             P@5    R@5    MRR
+memory     0.400  0.529  0.875
+no_memory  0.275  0.396  0.438
+
+Memory per conversation
+                  P@5    R@5    MRR
+C1    memory     0.20  0.292  1.000
+      no_memory  0.55  0.792  0.875
+C2    memory     0.60  0.767  0.750
+      no_memory  0.00  0.000  0.000

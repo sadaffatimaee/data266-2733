@@ -1,0 +1,65 @@
+HW11 RUN LOG
+Run date: 2026-11-11, Google Colab, Tesla T4 GPU
+SID4=2733 SEED=2733 SLICE=733 HP_ID=3 CLS_A=3 CLS_B=7
+torch 2.14.1+cu130 | transformers 5.22.1 | model openai/clip-vit-base-patch32 | device cuda
+
+[Load model]
+Device: cuda
+Embedding size: 512
+
+[Load data]
+Classes: ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+Number of images: 1000
+Images per class: [100 100 100 100 100 100 100 100 100 100]
+CIFAR-10 download: 170M/170M [26:57<00:00, 105kB/s]
+
+[Embeddings]
+Image embeddings: torch.Size([1000, 512])
+Caption embedding: torch.Size([1, 512])
+Vector lengths (should be 1.0): tensor([1., 1., 1.], device='cuda:0') tensor([1.], device='cuda:0')
+
+PART 1: similarity to "a photo of a dog" (100 images per class)
+Scores computed: (1000,)
+Range: min = 0.152, max = 0.285
+              mean     std     min     max
+class
+dog         0.2594  0.0120  0.2209  0.2855
+cat         0.2394  0.0133  0.2057  0.2681
+deer        0.2344  0.0137  0.2059  0.2743
+frog        0.2291  0.0132  0.1941  0.2599
+bird        0.2253  0.0133  0.1982  0.2751
+horse       0.2201  0.0141  0.1920  0.2648
+airplane    0.2035  0.0156  0.1521  0.2318
+automobile  0.2015  0.0112  0.1726  0.2254
+truck       0.1951  0.0100  0.1711  0.2228
+ship        0.1951  0.0115  0.1691  0.2236
+Classes of the top 10 images: ['dog', 'dog', 'dog', 'dog', 'dog', 'dog', 'dog', 'dog', 'dog', 'bird']
+
+Warning (first run): MatplotlibDeprecationWarning: The 'labels' parameter of boxplot() has been renamed 'tick_labels' since Matplotlib 3.9. Fixed by using tick_labels=.
+
+PART 2: zero-shot CIFAR-10 (10,000 test images)
+All image embeddings: torch.Size([10000, 512])
+Overall zero-shot accuracy: 88.80%
+automobile   97.60%
+horse        97.60%
+ship         95.50%
+airplane     90.10%
+truck        90.10%
+bird         88.80%
+dog          88.40%
+cat          86.00%
+frog         77.40%
+deer         76.50%
+
+Confusion matrix (rows = true, cols = predicted;
+order: airplane automobile bird cat deer dog frog horse ship truck)
+[[901  12  51   0   0   2   1   1  25   7]
+ [  3 976   0   0   0   1   0   0   2  18]
+ [  9   4 888  21  23  12   6  36   1   0]
+ [  3   7  20 860   8  79   8  11   4   0]
+ [  3   1  31  17 765  20   6 154   3   0]
+ [  0   1  21  69   7 884   2  13   3   0]
+ [  1   8  75  79  13  32 774   9   9   0]
+ [  3   1   5   4   3   8   0 976   0   0]
+ [ 25  12   2   0   0   2   0   0 955   4]
+ [  0  89   0   0   0   0   0   1   9 901]]

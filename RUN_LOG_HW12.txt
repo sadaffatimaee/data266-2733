@@ -1,3 +1,4 @@
+===================== PART 1 — GPTQ (facebook/opt-125m) =====================
 2026-11-19 22:23:40,238 | SID4=2733 SEED=2733 SLICE=733 HP_ID=3 CLS_A=3 CLS_B=7
 2026-11-19 22:23:40,240 | GPU: Tesla T4
 2026-11-19 22:23:40,243 | torch 2.15.0
@@ -196,3 +197,79 @@
 2026-11-19 22:27:08,665 | GPTQ p50=1012.6ms p95=1035.0ms infer_peak_mem=150.1MB
 2026-11-19 22:27:08,667 | GPTQ disk=122.7MB
 2026-11-19 22:27:09,104 | Saved results_part1.json
+
+===================== PART 2 — KNOWLEDGE DISTILLATION (BERT teacher -> DistilBERT student, AG News) =====================
+2026-11-19 22:54:15,367 | NumExpr defaulting to 4 threads.
+2026-11-19 22:54:15,955 | TensorFlow version 2.21.0 available.
+2026-11-19 22:54:15,960 | JAX version 0.11.1 available.
+2026-11-19 22:54:17,448 | SID4=2733 SEED=2733 SLICE=733 HP_ID=3 CLS_A=3 CLS_B=7
+2026-11-19 22:54:17,665 | GPU: Tesla T4 | visible: 1
+2026-11-19 22:54:17,666 | torch 2.11.0+cu130 | transformers 5.20.2 | datasets 4.8.5
+2026-11-19 23:12:47,621 | Found archives: []
+2026-11-19 23:16:19,863 | Teacher loaded locally from /kaggle/input/datasets/sadaffatimasyeda/hw12-teacher-model/teacher_model
+2026-11-19 23:16:19,865 | Arch: ['BertForSequenceClassification'] | model_type: bert
+2026-11-19 23:16:19,865 | num_labels: 4 | id2label: {0: 'WORLD', 1: 'SPORTS', 2: 'BUSINESS', 3: 'SCI/TECH'}
+2026-11-19 23:16:19,867 | Params: 109.5M
+2026-11-19 23:17:38,432 | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-11-19 23:17:41,479 | AG News loaded: train=120000 test=7600
+2026-11-19 23:17:41,480 | Dataset label names: ['World', 'Sports', 'Business', 'Sci/Tech']
+2026-11-19 23:17:41,483 | Example: label=0 | Israel Turns Up Heat on Palestinian Hunger Strike (Reuters) Reuters - Israel declared psychological war on\hunger-striki
+2026-11-19 23:22:17,557 | Teacher logits: shape=(120000, 4) in 218.1s
+2026-11-19 23:22:17,596 | Teacher accuracy on train (sanity check): 0.9895
+2026-11-19 23:22:17,629 | Saved teacher_train_logits.pt
+2026-11-19 23:24:52,155 | Student data: train=115000 val=5000 test=7600
+2026-11-19 23:24:52,157 | Fixed settings: epochs=1 bs=64 lr=5e-05 warmup=0.06 wd=0.01 max_len=128 fp16
+2026-11-19 23:24:52,159 | KD loss + training function defined.
+2026-11-19 23:25:33,275 | [T1_a0.5] step 1/1797 loss=1.3625 ce=1.3756 kl=1.3494 lr=4.67e-07
+2026-11-19 23:26:59,378 | [T1_a0.5] step 500/1797 loss=0.1633 ce=0.1709 kl=0.1557 lr=3.84e-05
+2026-11-19 23:28:24,938 | [T1_a0.5] step 1000/1797 loss=0.1895 ce=0.1932 kl=0.1857 lr=2.36e-05
+2026-11-19 23:29:50,727 | [T1_a0.5] step 1500/1797 loss=0.0608 ce=0.0658 kl=0.0559 lr=8.79e-06
+2026-11-19 23:30:41,687 | [T1_a0.5] step 1797/1797 loss=0.1578 ce=0.2057 kl=0.1099 lr=0.00e+00
+2026-11-19 23:30:56,674 | [T1_a0.5] DONE T=1 alpha=0.5 | val_acc=0.9418 test_acc=0.9433 | train_time=310s
+2026-11-19 23:30:57,437 | [T2_a0.5] step 1/1797 loss=2.9641 ce=1.3756 kl=4.5526 lr=4.67e-07
+2026-11-19 23:32:23,477 | [T2_a0.5] step 500/1797 loss=0.2862 ce=0.1774 kl=0.3950 lr=3.84e-05
+2026-11-19 23:33:49,036 | [T2_a0.5] step 1000/1797 loss=0.4445 ce=0.2685 kl=0.6204 lr=2.36e-05
+2026-11-19 23:35:14,669 | [T2_a0.5] step 1500/1797 loss=0.0909 ce=0.0400 kl=0.1417 lr=8.79e-06
+2026-11-19 23:36:05,359 | [T2_a0.5] step 1797/1797 loss=0.2959 ce=0.2590 kl=0.3327 lr=0.00e+00
+2026-11-19 23:36:20,315 | [T2_a0.5] DONE T=2 alpha=0.5 | val_acc=0.9384 test_acc=0.9433 | train_time=308s
+2026-11-19 23:36:21,104 | [T5_a0.5] step 1/1797 loss=5.3435 ce=1.3756 kl=9.3114 lr=4.67e-07
+2026-11-19 23:37:47,113 | [T5_a0.5] step 500/1797 loss=0.4159 ce=0.2045 kl=0.6273 lr=3.84e-05
+2026-11-19 23:39:12,589 | [T5_a0.5] step 1000/1797 loss=0.5930 ce=0.2817 kl=0.9043 lr=2.36e-05
+2026-11-19 23:40:38,487 | [T5_a0.5] step 1500/1797 loss=0.1189 ce=0.0264 kl=0.2113 lr=8.79e-06
+2026-11-19 23:41:29,154 | [T5_a0.5] step 1797/1797 loss=0.4140 ce=0.2996 kl=0.5283 lr=0.00e+00
+2026-11-19 23:41:44,103 | [T5_a0.5] DONE T=5 alpha=0.5 | val_acc=0.9406 test_acc=0.9432 | train_time=308s
+2026-11-19 23:41:44,915 | [T10_a0.5] step 1/1797 loss=5.4269 ce=1.3756 kl=9.4782 lr=4.67e-07
+2026-11-19 23:43:10,942 | [T10_a0.5] step 500/1797 loss=0.3694 ce=0.1767 kl=0.5621 lr=3.84e-05
+2026-11-19 23:44:36,823 | [T10_a0.5] step 1000/1797 loss=0.7175 ce=0.3717 kl=1.0634 lr=2.36e-05
+2026-11-19 23:46:02,354 | [T10_a0.5] step 1500/1797 loss=0.1183 ce=0.0275 kl=0.2091 lr=8.79e-06
+2026-11-19 23:46:53,284 | [T10_a0.5] step 1797/1797 loss=0.3754 ce=0.2878 kl=0.4629 lr=0.00e+00
+2026-11-19 23:47:08,317 | [T10_a0.5] DONE T=10 alpha=0.5 | val_acc=0.9416 test_acc=0.9418 | train_time=309s
+2026-11-19 23:47:08,773 | Temperature sweep done. BEST_T=1 (val_acc=0.9418)
+2026-11-19 23:51:36,192 | [T1_a0.25] step 1/1797 loss=1.3560 ce=1.3756 kl=1.3494 lr=4.67e-07
+2026-11-19 23:53:02,599 | [T1_a0.25] step 500/1797 loss=0.1598 ce=0.1712 kl=0.1560 lr=3.84e-05
+2026-11-19 23:54:28,177 | [T1_a0.25] step 1000/1797 loss=0.2049 ce=0.2119 kl=0.2025 lr=2.36e-05
+2026-11-19 23:55:54,066 | [T1_a0.25] step 1500/1797 loss=0.0546 ce=0.0627 kl=0.0519 lr=8.79e-06
+2026-11-19 23:56:44,734 | [T1_a0.25] step 1797/1797 loss=0.1141 ce=0.1846 kl=0.0906 lr=0.00e+00
+2026-11-19 23:56:59,614 | [T1_a0.25] DONE T=1 alpha=0.25 | val_acc=0.9406 test_acc=0.9430 | train_time=309s
+2026-11-19 23:56:59,978 | New best student saved: T1_a0.25 (val_acc=0.9406)
+2026-11-19 23:57:01,034 | [T1_a0.5] step 1/1797 loss=1.3625 ce=1.3756 kl=1.3494 lr=4.67e-07
+2026-11-19 23:58:26,943 | [T1_a0.5] step 500/1797 loss=0.1633 ce=0.1709 kl=0.1557 lr=3.84e-05
+2026-11-19 23:59:52,296 | [T1_a0.5] step 1000/1797 loss=0.1895 ce=0.1932 kl=0.1857 lr=2.36e-05
+2026-11-20 00:01:17,886 | [T1_a0.5] step 1500/1797 loss=0.0608 ce=0.0658 kl=0.0559 lr=8.79e-06
+2026-11-20 00:02:08,757 | [T1_a0.5] step 1797/1797 loss=0.1578 ce=0.2057 kl=0.1099 lr=0.00e+00
+2026-11-20 00:02:24,189 | [T1_a0.5] DONE T=1 alpha=0.5 | val_acc=0.9418 test_acc=0.9433 | train_time=308s
+2026-11-20 00:02:24,623 | New best student saved: T1_a0.5 (val_acc=0.9418)
+2026-11-20 00:02:25,412 | [T1_a0.75] step 1/1797 loss=1.3691 ce=1.3756 kl=1.3494 lr=4.67e-07
+2026-11-20 00:03:51,743 | [T1_a0.75] step 500/1797 loss=0.1943 ce=0.1980 kl=0.1831 lr=3.84e-05
+2026-11-20 00:05:17,269 | [T1_a0.75] step 1000/1797 loss=0.1875 ce=0.1901 kl=0.1796 lr=2.36e-05
+2026-11-20 00:06:42,715 | [T1_a0.75] step 1500/1797 loss=0.0578 ce=0.0600 kl=0.0512 lr=8.79e-06
+2026-11-20 00:07:33,516 | [T1_a0.75] step 1797/1797 loss=0.1738 ce=0.1972 kl=0.1036 lr=0.00e+00
+2026-11-20 00:07:49,237 | [T1_a0.75] DONE T=1 alpha=0.75 | val_acc=0.9408 test_acc=0.9420 | train_time=308s
+2026-11-20 00:07:49,659 | Alpha sweep done. BEST student = T1_a0.5 | val=0.9418 test=0.9433
+2026-11-20 00:17:30,730 | Teacher (BERT-base): acc=0.9443 p50=13.57ms p95=15.05ms peak=0.779GB disk=418.6MB params=109.5M full_test=12.2s
+2026-11-20 00:17:40,638 | Best distilled student (T1_a0.5): acc=0.9434 p50=6.72ms p95=7.17ms peak=0.514GB disk=256.1MB params=67.0M full_test=6.7s
+2026-11-20 00:17:40,644 | Saved results_part2.json
+2026-11-20 00:19:22,832 | Saved figures/loss_trends.png
+2026-11-20 00:20:48,399 | Class that degrades most: Business
+2026-11-20 00:20:48,410 | Business: 55 examples teacher-right / student-wrong
+2026-11-20 00:21:37,546 | Zipped best student checkpoint

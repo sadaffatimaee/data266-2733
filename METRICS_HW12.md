@@ -91,7 +91,7 @@ Five examples (true = Business, teacher correct, student wrong; full text from t
 ### Checkpoint
 Best student (T1, α0.5): `best_student_T1_a0.5.zip` (236 MB) — link: https://drive.google.com/file/d/1yv0aqi4rCNr59v8GNHTbqF2zsG0TPx5j/view?usp=drive_link
 Reproduce: run `HW12_part2_distill.ipynb` top to bottom on a Kaggle T4 (`train_student(T=1, alpha=0.5, tag="T1_a0.5")`).
-
+GPTQ model (opt-125m, 4-bit g128, 122.7 MB): not retained after the Kaggle session; regenerate by running `HW12_part1_gptq.ipynb` top to bottom (`GPTQConfig(bits=4, group_size=128, dataset="wikitext2", desc_act=False)`, 49 s on a T4).
 ## Quantization vs distillation
 
 GPTQ compresses an existing model after training in under a minute, while distillation trains a new, smaller architecture (~5 min per student here). On the T4, GPTQ halved disk size (238.9 → 122.7 MB) and cut peak memory by 41%, but generation became ~1.85× slower because weights are dequantized on the fly without Marlin support. Distillation removed 39% of the parameters, which halved latency (p50 13.57 → 6.72 ms) and cut memory by 34% and disk by 39%. Each lost a little quality on its own task, but the two quality numbers measure different tasks and are not comparable. For a latency-bound deployment I would consider distillation first, because fewer layers mean less compute on any hardware; for a memory-bound deployment I would consider GPTQ first, because it shrinks weights without retraining and can also be applied on top of a distilled model.

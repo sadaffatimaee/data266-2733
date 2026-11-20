@@ -79,12 +79,12 @@ Latency = batch-1, 300 test texts after 20 warm-ups, fp16. Full test set (7,600)
 
 Business degrades most. 55 Business articles are teacher-right / student-wrong; the student sends 45 of them to Sci/Tech.
 
-Five examples (true = Business, teacher correct, student wrong):
-1. *Two top Nokia executives resign …* → Sci/Tech
-2. *Botswana miners 'face dismissal' …* → World
-3. *Netflix, TiVo sign VoD alliance …* → Sci/Tech
-4. *Guilty Plea Seen in Computer Associates Case …* → Sci/Tech
-5. *Nortel Downsizes Again … eliminate 3,500 jobs …* → Sci/Tech
+Five examples (true = Business, teacher correct, student wrong; full text from the test set):
+1. [test #6849] → student: Sci/Tech — "Two top Nokia executives resign HELSINKI: Nokia said the respected head of its networks unit had resigned and another top networks official left in the second major departure of top management in two weeks at the world #39;s largest mobile phone maker."
+2. [test #449] → student: World — "Botswana miners 'face dismissal' Botswana's giant Debswana diamond mining firm says it will sack workers who carry on with an illegal stoppage."
+3. [test #2914] → student: Sci/Tech — "Netflix, TiVo sign VoD alliance Netflix, the online DVD rental company, and TiVo yesterday said they will work together to deliver movies digitally down the wires, presumably specifically to the latter #39;s PVR equipment."
+4. [test #2233] → student: Sci/Tech — "Guilty Plea Seen in Computer Associates Case Steven Woghin, the former general counsel of Computer Associates, will plead guilty to criminal charges."
+5. [test #399] → student: Sci/Tech — "Nortel Downsizes Again Aug. 23, 2004 (TheDeal.com) Problem-plagued Nortel Networks Corp. announced plans Thursday, Aug. 19, to eliminate an additional 3,500 jobs and fire seven more senior executives as the company labors to reinvent"
 
 **What they have in common:** four of five are business events (resignations, deals, lawsuits, layoffs) at technology companies. The student keys on tech vocabulary ("networks", "mobile phone", "computer") over the business framing, shifting the Business/Sci-Tech boundary toward Sci/Tech — which is also why Sci/Tech accuracy rose.
 

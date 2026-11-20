@@ -1,0 +1,1 @@
+Claude produced the plausible but incorrect output “GPTQ peak GPU memory: 0.263 GB (269.4 MB)” because I re-ran the measurement in the same Python session after a failed GPTQ/Marlin load; leftover GPU tensors were still counted by torch.cuda.max_memory_allocated()the rest was facile 

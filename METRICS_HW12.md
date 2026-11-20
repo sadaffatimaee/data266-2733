@@ -89,7 +89,7 @@ Five examples (true = Business, teacher correct, student wrong):
 **What they have in common:** four of five are business events (resignations, deals, lawsuits, layoffs) at technology companies. The student keys on tech vocabulary ("networks", "mobile phone", "computer") over the business framing, shifting the Business/Sci-Tech boundary toward Sci/Tech — which is also why Sci/Tech accuracy rose.
 
 ### Checkpoint
-Best student (T1, α0.5): `best_student_T1_a0.5.zip` (236 MB) — link: *(to be added)*
+Best student (T1, α0.5): `best_student_T1_a0.5.zip` (236 MB) — link: https://drive.google.com/file/d/1yv0aqi4rCNr59v8GNHTbqF2zsG0TPx5j/view?usp=drive_link
 Reproduce: run `HW12_part2_distill.ipynb` top to bottom on a Kaggle T4 (`train_student(T=1, alpha=0.5, tag="T1_a0.5")`).
 
 ## Quantization vs distillation

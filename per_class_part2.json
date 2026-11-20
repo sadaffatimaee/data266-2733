@@ -1,0 +1,30 @@
+[
+  {
+    "cls":"World",
+    "n":1900,
+    "teacher_acc":0.9489,
+    "student_acc":0.9447,
+    "drop_pts":0.42
+  },
+  {
+    "cls":"Sports",
+    "n":1900,
+    "teacher_acc":0.9884,
+    "student_acc":0.9884,
+    "drop_pts":0.0
+  },
+  {
+    "cls":"Business",
+    "n":1900,
+    "teacher_acc":0.9137,
+    "student_acc":0.9053,
+    "drop_pts":0.84
+  },
+  {
+    "cls":"Sci\/Tech",
+    "n":1900,
+    "teacher_acc":0.9263,
+    "student_acc":0.9353,
+    "drop_pts":-0.89
+  }
+]
